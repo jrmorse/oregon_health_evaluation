@@ -514,6 +514,612 @@ q4_b</code></pre>
 <li>By how much (how many percentage points) did winning the lottery increase the probability of enrolling in Medicaid? Is this similar to what is reported in Baicker et al. (2013)?</li>
 </ol>
 <p>Winning the lottery increased the probability of enrolling in medicaid by 23.52 percentage points. This is similar to what Baicker et al. (2013) reported but not exactly the same value. Baicker et al. (2013) reported an increased probability of enrolling in medicaid by 24.1 percentage points.</p>
+<p>PART 2</p>
+<pre class="r"><code># only the folks who were classified as respondents.
+
+baicker &lt;- data %&gt;% 
+  filter(sample_inp_resp == &quot;Respondent&quot;) 
+baicker</code></pre>
+<pre><code>## # A tibble: 12,229 x 350
+##    person_id in_inperson_data sample_inp_resp weight_total_inp dt_release_inp
+##        &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;         
+##  1         5 Yes              Respondent                 1.15  28dec2009     
+##  2         8 Yes              Respondent                 0.897 09mar2010     
+##  3        16 Yes              Respondent                 1     12apr2010     
+##  4        17 Yes              Respondent                 1.21  08feb2010     
+##  5        18 Yes              Respondent                 1     31aug2009     
+##  6        23 Yes              Respondent                 1.00  09jun2010     
+##  7        24 Yes              Respondent                 1.20  30mar2010     
+##  8        29 Yes              Respondent                 1     04may2010     
+##  9        47 Yes              Respondent                 1     06jul2010     
+## 10        57 Yes              Respondent                 1.00  06jul2010     
+## # … with 12,219 more rows, and 345 more variables: dt_completed_inp &lt;chr&gt;,
+## #   interview_location_inp &lt;chr&gt;, interviewer_inp &lt;dbl&gt;, scale_id &lt;chr&gt;,
+## #   stadio_id &lt;chr&gt;, omron_id &lt;chr&gt;, language_capi_inp &lt;chr&gt;,
+## #   interpreter_inp &lt;chr&gt;, gender_inp &lt;chr&gt;, age_inp &lt;dbl&gt;,
+## #   health_last12_inp &lt;chr&gt;, health_change_inp &lt;chr&gt;, sf4_inp &lt;chr&gt;,
+## #   ast_dx_pre_lottery &lt;chr&gt;, dia_dx_pre_lottery &lt;chr&gt;,
+## #   hbp_dx_pre_lottery &lt;chr&gt;, chl_dx_pre_lottery &lt;chr&gt;,
+## #   ami_dx_pre_lottery &lt;chr&gt;, chf_dx_pre_lottery &lt;chr&gt;,
+## #   emp_dx_pre_lottery &lt;chr&gt;, kid_dx_pre_lottery &lt;chr&gt;,
+## #   cancer_dx_pre_lottery &lt;chr&gt;, dep_dx_pre_lottery &lt;chr&gt;,
+## #   dia_dx_post_lottery &lt;chr&gt;, hbp_dx_post_lottery &lt;chr&gt;,
+## #   chl_dx_post_lottery &lt;chr&gt;, dep_dx_post_lottery &lt;chr&gt;, happiness_inp &lt;chr&gt;,
+## #   phqtot_inp &lt;dbl&gt;, pcs8_score &lt;dbl&gt;, mcs8_score &lt;dbl&gt;,
+## #   usual_clinic_inp &lt;chr&gt;, needmet_med_inp &lt;chr&gt;, needmet_ment_inp &lt;chr&gt;,
+## #   needmet_rx_inp &lt;chr&gt;, med_qual_inp &lt;chr&gt;, chl_chk_inp &lt;chr&gt;,
+## #   pap_chk_inp &lt;chr&gt;, mam_chk_inp &lt;chr&gt;, fobt_chk_inp &lt;chr&gt;,
+## #   col_chk_inp &lt;chr&gt;, psa_chk_inp &lt;chr&gt;, did_flu_inp &lt;chr&gt;,
+## #   smk_curr_inp &lt;chr&gt;, cvd_risk_point &lt;dbl&gt;, doc_num_incl_probe_inp &lt;dbl&gt;,
+## #   doc_any_incl_probe_inp &lt;chr&gt;, ed_num_incl_probe_inp &lt;dbl&gt;,
+## #   ed_any_incl_probe_inp &lt;chr&gt;, surg_num_incl_probe_inp &lt;dbl&gt;,
+## #   surg_any_incl_probe_inp &lt;chr&gt;, hosp_num_incl_probe_inp &lt;dbl&gt;,
+## #   hosp_any_incl_probe_inp &lt;chr&gt;, tot_med_spend_other_inp &lt;dbl&gt;,
+## #   any_oop_spending &lt;chr&gt;, catastrophic_exp_inp &lt;chr&gt;, ins_any_inp &lt;chr&gt;,
+## #   ins_ohp_inp &lt;chr&gt;, ins_private_inp &lt;chr&gt;, owe_inp &lt;chr&gt;, borrow_inp &lt;chr&gt;,
+## #   edu_inp &lt;chr&gt;, hispanic_inp &lt;chr&gt;, race_white_inp &lt;chr&gt;,
+## #   race_black_inp &lt;chr&gt;, race_nwother_inp &lt;chr&gt;, a1c_inp &lt;dbl&gt;, hdl_inp &lt;dbl&gt;,
+## #   chl_inp &lt;dbl&gt;, bmi_inp &lt;dbl&gt;, bp_sar_inp &lt;dbl&gt;, bp_dar_inp &lt;dbl&gt;,
+## #   has_bp_inp &lt;chr&gt;, has_waist_inp &lt;chr&gt;, has_hght_wght_inp &lt;chr&gt;,
+## #   has_dbs_inp &lt;chr&gt;, has_all_dbs_inp &lt;chr&gt;, rx_any_mod_inp &lt;chr&gt;,
+## #   rx_num_mod_inp &lt;dbl&gt;, hbp_diure_med_inp &lt;chr&gt;, antihyperlip_med_inp &lt;chr&gt;,
+## #   diabetes_med_inp &lt;chr&gt;, antidep_med_inp &lt;chr&gt;, meds_miss_comp &lt;chr&gt;,
+## #   household_id &lt;dbl&gt;, treatment &lt;chr&gt;, draw_lottery &lt;chr&gt;, numhh_list &lt;chr&gt;,
+## #   have_phone_list &lt;chr&gt;, english_list &lt;chr&gt;, first_day_list &lt;chr&gt;,
+## #   pobox_list &lt;chr&gt;, self_list &lt;chr&gt;, sample_12m_resp &lt;chr&gt;, weight_12m &lt;dbl&gt;,
+## #   ohp_all_ever_admin &lt;chr&gt;, ohp_all_ever_inperson &lt;chr&gt;,
+## #   ohp_all_ever_survey &lt;chr&gt;, ohp_all_end_inperson &lt;chr&gt;,
+## #   ohp_all_mo_inperson &lt;chr&gt;, …</code></pre>
+<pre class="r"><code>total &lt;- baicker %&gt;% 
+  nrow()
+
+baicker_winners &lt;- baicker %&gt;% 
+  filter(treatment == &quot;Selected&quot;) 
+baicker_winners_count &lt;- baicker_winners %&gt;% 
+  nrow()
+
+baicker_losers &lt;- baicker %&gt;% 
+  filter(treatment == &quot;Not selected&quot;)
+baicker_losers_count &lt;- baicker_losers %&gt;% 
+  nrow()</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>How many people are now in your sample? How many lottery winners are now in your sample? How many lottery losers are now in your sample? Is this similar to what is reported in Baicker et al. (2013)?</li>
+</ol>
+<p>There are a total of 12229 people in my sample. There are 6387 in my sample. There are 5842 in my sample. This appears to be the same as what is reported in Baicker et al. (2013) in table 1. The number of controls, lottery winners, and total survey respondents are all the same.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>I do expect lottery winners and lottery losers to appear similar on observable characteristics. If the likilehood of winning the lottery was indeed random, than both populations should be very similar accross characteristics such as race, sex, and income.</li>
+</ol>
+<pre class="r"><code>pct_winners_baicker &lt;- baicker_winners %&gt;% 
+mutate(q8 = ifelse(gender_inp == &quot;Female&quot;,&quot;True&quot;, &quot;False&quot;))
+
+prob &lt;- prop.table(table(pct_winners_baicker$q8))
+
+q8_a &lt;- round(prob * 100,2)[2]
+
+pct_losers_baicker &lt;- baicker_losers %&gt;% 
+mutate(q8 = ifelse(gender_inp == &quot;Female&quot;,&quot;True&quot;, &quot;False&quot;))
+
+prob &lt;- prop.table(table(pct_losers_baicker$q8))
+
+q8_b &lt;- round(prob * 100,2)[2]</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>The variable “gender_inp” reports gender from the in-person survey. What percent of lottery winners are female? What percent of lottery losers are female?</li>
+</ol>
+<p>56.27 percent of lottery winners are female. 56.85 percent of lottery losers are female.</p>
+<pre class="r"><code>age_groups &lt;- baicker %&gt;% 
+  mutate(age_group = case_when(age_19_34_inp == 1 ~ &quot;19-34&quot;,
+                               age_35_49_inp == 1 ~ &quot;35-49&quot;,
+                               age_50_64_inp == 1 ~ &quot;50-64&quot;)) %&gt;% 
+  group_by(treatment, age_group) %&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(freq = (n / sum(n))* 100) %&gt;% 
+  select(treatment, age_group, freq) %&gt;% 
+  gt() %&gt;% 
+  tab_header(title = &quot;Age Groups for Winners and Losers&quot;,
+             subtitle = &quot;Not selected = Loser &amp; Selected = Winner&quot;) %&gt;% 
+    cols_label(age_group = &quot;Age Group&quot;,
+               freq = &quot;Percentage&quot;)
+age_groups</code></pre>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#wccahnnayn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  /* table.margin.left */
+  margin-right: auto;
+  /* table.margin.right */
+  color: #333333;
+  font-size: 16px;
+  /* table.font.size */
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+  border-bottom-style: solid;
+  /* table.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table.border.bottom.color */
+}
+
+#wccahnnayn .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-left-style: hidden;
+  /* heading.border.lr.style */
+  border-left-width: 1px;
+  /* heading.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* heading.border.lr.color */
+  border-right-style: hidden;
+  /* heading.border.lr.style */
+  border-right-width: 1px;
+  /* heading.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* heading.border.lr.color */
+}
+
+#wccahnnayn .gt_title {
+  color: #333333;
+  font-size: 125%;
+  /* heading.title.font.size */
+  font-weight: initial;
+  /* heading.title.font.weight */
+  padding-top: 4px;
+  /* heading.top.padding - not yet used */
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-bottom-width: 0;
+}
+
+#wccahnnayn .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  font-weight: initial;
+  /* heading.subtitle.font.weight */
+  padding-top: 0;
+  padding-bottom: 4px;
+  /* heading.bottom.padding - not yet used */
+  border-top-color: #FFFFFF;
+  /* table.background.color */
+  border-top-width: 0;
+}
+
+#wccahnnayn .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* heading.border.bottom.color */
+}
+
+#wccahnnayn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wccahnnayn .gt_col_headings {
+  border-top-style: solid;
+  /* column_labels.border.top.style */
+  border-top-width: 2px;
+  /* column_labels.border.top.width */
+  border-top-color: #D3D3D3;
+  /* column_labels.border.top.color */
+  border-bottom-style: solid;
+  /* column_labels.border.bottom.style */
+  border-bottom-width: 2px;
+  /* column_labels.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* column_labels.border.bottom.color */
+  border-left-style: none;
+  /* column_labels.border.lr.style */
+  border-left-width: 1px;
+  /* column_labels.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+  border-right-style: none;
+  /* column_labels.border.lr.style */
+  border-right-width: 1px;
+  /* column_labels.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+}
+
+#wccahnnayn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 100%;
+  /* column_labels.font.size */
+  font-weight: normal;
+  /* column_labels.font.weight */
+  text-transform: inherit;
+  /* column_labels.text_transform */
+  vertical-align: middle;
+  padding: 5px;
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+#wccahnnayn .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#wccahnnayn .gt_group_heading {
+  padding: 8px;
+  /* row_group.padding */
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  text-transform: inherit;
+  /* row_group.text_transform */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  border-left-style: none;
+  /* row_group.border.left.style */
+  border-left-width: 1px;
+  /* row_group.border.left.width */
+  border-left-color: #D3D3D3;
+  /* row_group.border.left.color */
+  border-right-style: none;
+  /* row_group.border.right.style */
+  border-right-width: 1px;
+  /* row_group.border.right.width */
+  border-right-color: #D3D3D3;
+  /* row_group.border.right.color */
+  vertical-align: middle;
+}
+
+#wccahnnayn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#wccahnnayn .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+  /* row.striping.background_color */
+}
+
+#wccahnnayn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wccahnnayn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wccahnnayn .gt_row {
+  padding-top: 8px;
+  /* data_row.padding */
+  padding-bottom: 8px;
+  /* data_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  /* table_body.hlines.style */
+  border-top-width: 1px;
+  /* table_body.hlines.width */
+  border-top-color: #D3D3D3;
+  /* table_body.hlines.color */
+  border-left-style: none;
+  /* table_body.vlines.style */
+  border-left-width: 1px;
+  /* table_body.vlines.width */
+  border-left-color: #D3D3D3;
+  /* table_body.vlines.color */
+  border-right-style: none;
+  /* table_body.vlines.style */
+  border-right-width: 1px;
+  /* table_body.vlines.width */
+  border-right-color: #D3D3D3;
+  /* table_body.vlines.color */
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wccahnnayn .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* stub.background.color */
+  font-weight: initial;
+  /* stub.font.weight */
+  text-transform: inherit;
+  /* stub.text_transform */
+  border-right-style: solid;
+  /* stub.border.style */
+  border-right-width: 2px;
+  /* stub.border.width */
+  border-right-color: #D3D3D3;
+  /* stub.border.color */
+  padding-left: 12px;
+}
+
+#wccahnnayn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wccahnnayn .gt_first_summary_row {
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  /* summary_row.border.style */
+  border-top-width: 2px;
+  /* summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* summary_row.border.color */
+}
+
+#wccahnnayn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* grand_summary_row.background.color */
+  text-transform: inherit;
+  /* grand_summary_row.text_transform */
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wccahnnayn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  /* grand_summary_row.border.style */
+  border-top-width: 6px;
+  /* grand_summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* grand_summary_row.border.color */
+}
+
+#wccahnnayn .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #D3D3D3;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* table_body.border.bottom.color */
+}
+
+#wccahnnayn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* footnotes.background.color */
+  border-bottom-style: none;
+  /* footnotes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* footnotes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* footnotes.border.bottom.color */
+  border-left-style: none;
+  /* footnotes.border.lr.color */
+  border-left-width: 2px;
+  /* footnotes.border.lr.color */
+  border-left-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+  border-right-style: none;
+  /* footnotes.border.lr.color */
+  border-right-width: 2px;
+  /* footnotes.border.lr.color */
+  border-right-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+}
+
+#wccahnnayn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  /* footnotes.font.size */
+  padding: 4px;
+  /* footnotes.padding */
+}
+
+#wccahnnayn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* source_notes.background.color */
+  border-bottom-style: none;
+  /* source_notes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* source_notes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* source_notes.border.bottom.color */
+  border-left-style: none;
+  /* source_notes.border.lr.style */
+  border-left-width: 2px;
+  /* source_notes.border.lr.style */
+  border-left-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+  border-right-style: none;
+  /* source_notes.border.lr.style */
+  border-right-width: 2px;
+  /* source_notes.border.lr.style */
+  border-right-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+}
+
+#wccahnnayn .gt_sourcenote {
+  font-size: 90%;
+  /* source_notes.font.size */
+  padding: 4px;
+  /* source_notes.padding */
+}
+
+#wccahnnayn .gt_left {
+  text-align: left;
+}
+
+#wccahnnayn .gt_center {
+  text-align: center;
+}
+
+#wccahnnayn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wccahnnayn .gt_font_normal {
+  font-weight: normal;
+}
+
+#wccahnnayn .gt_font_bold {
+  font-weight: bold;
+}
+
+#wccahnnayn .gt_font_italic {
+  font-style: italic;
+}
+
+#wccahnnayn .gt_super {
+  font-size: 65%;
+}
+
+#wccahnnayn .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="wccahnnayn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="2" class="gt_heading gt_title gt_font_normal gt_center" style>Age Groups for Winners and Losers</th>
+    </tr>
+    <tr>
+      <th colspan="2" class="gt_heading gt_subtitle gt_font_normal gt_center gt_bottom_border" style>Not selected = Loser &amp; Selected = Winner</th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Age Group</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Percentage</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr class="gt_group_heading_row">
+      <td colspan="2" class="gt_group_heading">Not selected</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">19-34</td>
+      <td class="gt_row gt_right">35.99794591</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">35-49</td>
+      <td class="gt_row gt_right gt_striped">36.93940431</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">50-64</td>
+      <td class="gt_row gt_right">27.02841493</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">NA</td>
+      <td class="gt_row gt_right gt_striped">0.03423485</td>
+    </tr>
+    <tr class="gt_group_heading_row">
+      <td colspan="2" class="gt_group_heading">Selected</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">19-34</td>
+      <td class="gt_row gt_right">34.66416158</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">35-49</td>
+      <td class="gt_row gt_right gt_striped">37.24753405</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">50-64</td>
+      <td class="gt_row gt_right">28.07264757</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">NA</td>
+      <td class="gt_row gt_right gt_striped">0.01565680</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<ol start="9" style="list-style-type: decimal">
+<li>The variable “age_inp” reports age from the in-person survey, and the variables “age_19_34_inp”, “age_35_49_inp”, and “age_50_64_inp” are 0/1 dummies for different age bins. What percent of lottery winners and lottery losers are in each of the following age bins: 19-34, 35-49, 50-64?</li>
+</ol>
+<p>Winners age 19 - 34: 34.66% Losers age 19 - 34: 35.998%</p>
+<p>Winners age 35-49: 37.25% Losers age 35-49: 36.94%</p>
+<p>Winners age 50 - 64: 28.07% Losers age 50 - 64: 27.02%</p>
 
 
 

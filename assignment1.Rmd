@@ -104,3 +104,84 @@ question_5 <- q4_a - q4_b
 5.	By how much (how many percentage points) did winning the lottery increase the probability of enrolling in Medicaid? Is this similar to what is reported in Baicker et al. (2013)?
 
 Winning the lottery increased the probability of enrolling in medicaid by `r question_5` percentage points. This is similar to what Baicker et al. (2013) reported but not exactly the same value. Baicker et al. (2013) reported an increased probability of enrolling in medicaid by 24.1 percentage points.
+
+PART 2
+
+```{r respondents}
+# only the folks who were classified as respondents.
+
+baicker <- data %>% 
+  filter(sample_inp_resp == "Respondent") 
+baicker
+```
+
+```{r question 6}
+
+total <- baicker %>% 
+  nrow()
+
+baicker_winners <- baicker %>% 
+  filter(treatment == "Selected") 
+baicker_winners_count <- baicker_winners %>% 
+  nrow()
+
+baicker_losers <- baicker %>% 
+  filter(treatment == "Not selected")
+baicker_losers_count <- baicker_losers %>% 
+  nrow()
+
+```
+6.	How many people are now in your sample? How many lottery winners are now in your sample? How many lottery losers are now in your sample? Is this similar to what is reported in Baicker et al. (2013)?
+
+There are a total of `r total` people in my sample. There are `r baicker_winners_count` in my sample. There are `r baicker_losers_count` in my sample. This appears to be the same as what is reported in Baicker et al. (2013) in table 1. The number of controls, lottery winners, and total survey respondents are all the same.
+
+7. I do expect lottery winners and lottery losers to appear similar on observable characteristics. If the likilehood of winning the lottery was indeed random, than both populations should be very similar accross characteristics such as race, sex, and income.
+
+```{r question 8}
+pct_winners_baicker <- baicker_winners %>% 
+mutate(q8 = ifelse(gender_inp == "Female","True", "False"))
+
+prob <- prop.table(table(pct_winners_baicker$q8))
+
+q8_a <- round(prob * 100,2)[2]
+
+pct_losers_baicker <- baicker_losers %>% 
+mutate(q8 = ifelse(gender_inp == "Female","True", "False"))
+
+prob <- prop.table(table(pct_losers_baicker$q8))
+
+q8_b <- round(prob * 100,2)[2]
+
+```
+8.	The variable “gender_inp” reports gender from the in-person survey. What percent of lottery winners are female? What percent of lottery losers are female?
+
+`r q8_a` percent of lottery winners are female. `r q8_b` percent of lottery losers are female.
+
+```{r question 9}
+age_groups <- baicker %>% 
+  mutate(age_group = case_when(age_19_34_inp == 1 ~ "19-34",
+                               age_35_49_inp == 1 ~ "35-49",
+                               age_50_64_inp == 1 ~ "50-64")) %>% 
+  group_by(treatment, age_group) %>%
+  summarise(n = n()) %>%
+  mutate(freq = (n / sum(n))* 100) %>% 
+  select(treatment, age_group, freq) %>% 
+  gt() %>% 
+  tab_header(title = "Age Groups for Winners and Losers",
+             subtitle = "Not selected = Loser & Selected = Winner") %>% 
+    cols_label(age_group = "Age Group",
+               freq = "Percentage")
+age_groups
+
+```
+
+9.	The variable “age_inp” reports age from the in-person survey, and the variables “age_19_34_inp”, “age_35_49_inp”, and “age_50_64_inp” are 0/1 dummies for different age bins. What percent of lottery winners and lottery losers are in each of the following age bins: 19-34, 35-49, 50-64?
+
+Winners age 19 - 34: 34.66%
+Losers age 19 - 34: 35.998%
+
+Winners age 35-49: 37.25%
+Losers age 35-49: 36.94%
+
+Winners age 50 - 64: 28.07%
+Losers age 50 - 64: 27.02%
