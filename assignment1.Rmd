@@ -9,3 +9,98 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, include = FALSE}
+library(readxl)
+library(janitor)
+library(tidyverse)
+library(gt)
+library(infer)
+library(psych)
+```
+
+```{r}
+data <- read_csv("data/ohie.csv") %>% 
+  clean_names()
+data
+```
+
+```{r question 1}
+observations <- data %>% 
+  nrow()
+observations
+```
+
+1.	How many observations are in the data set? What unit of analysis does each observation represent?
+
+There are `r observations` in the data set. Each observation represents an individual within the study. This includes the respondents and non-respondents.
+
+```{r question 2}
+winners <- data %>% 
+  filter(treatment == "Selected") 
+winners_count <- winners %>% 
+  nrow()
+
+losers <- data %>% 
+  filter(treatment == "Not selected") 
+
+losers_count <- losers %>% 
+  nrow()
+
+```
+
+2.	The variable “treatment” is a 0/1 dummy. It is equal to 1 for “lottery winners” and 0 for “lottery losers.” How many lottery winners are there? How many lottery losers are there?
+
+There are `r winners_count` lottery winners. There are `r losers_count` lottery losers.
+
+```{r question 3}
+label <-unique(data$ohp_all_ever_survey, incomparables = FALSE) 
+
+enrolled <- data %>% 
+  group_by(ohp_all_ever_survey) %>% 
+  summarize(count= n()) %>%
+  slice(1) %>% 
+  pull(2)
+
+not_enrolled <- data %>% 
+  group_by(ohp_all_ever_survey) %>% 
+  summarize(count= n()) %>%
+  slice(2) %>% 
+  pull(2)
+
+```
+
+3. The variable “ohp_all_ever_survey” is a 0/1 dummy. Use the “describe” command to find the variable label for this variable and report it here. The variable is equal to 1 for those who enrolled in Medicaid and 0 for those who did not enroll in Medicaid. How many Medicaid enrollees are there? How many Medicaid non-enrollees are there?
+
+**Unsure if I have answered the question you're looking for.**
+The different variable labels are `r label`. THere were `r enrolled` Medicaid enrolles, and `r not_enrolled` Medicaid non-enrollees.
+
+```{r question 4}
+pct_winners_e <- winners %>% 
+mutate(q4 = ifelse(ohp_all_ever_survey == "Enrolled","True", "False"))
+
+prob <- prop.table(table(pct_winners_e$q4))
+
+q4_a <- round(prob * 100,2)[2]
+q4_a
+
+pct_losers_e <- losers %>% 
+mutate(q4 = ifelse(ohp_all_ever_survey == "Enrolled","True", "False"))
+
+prob <- prop.table(table(pct_losers_e$q4))
+
+q4_b <- round(prob * 100,2)[2]
+q4_b
+
+```
+4.	What percent of “lottery winners” enrolled in Medicaid? What percent of “lottery losers” enrolled in Medicaid?
+
+`r q4_a` percent of lottery winners enrolled in Medicaid. `r q4_b` percent of lottery losers enrolled in Medicaid.
+
+
+```{r question 5}
+question_5 <- q4_a - q4_b
+```
+
+5.	By how much (how many percentage points) did winning the lottery increase the probability of enrolling in Medicaid? Is this similar to what is reported in Baicker et al. (2013)?
+
+Winning the lottery increased the probability of enrolling in medicaid by `r question_5` percentage points. This is similar to what Baicker et al. (2013) reported but not exactly the same value. Baicker et al. (2013) reported an increased probability of enrolling in medicaid by 24.1 percentage points.
