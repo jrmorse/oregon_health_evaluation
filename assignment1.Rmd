@@ -185,3 +185,28 @@ Losers age 35-49: 36.94%
 
 Winners age 50 - 64: 28.07%
 Losers age 50 - 64: 27.02%
+
+```{r question 10}
+baicker_race <- baicker %>% 
+  mutate(race = case_when(hispanic_inp == "Yes" ~ "1",
+                               race_white_inp == "Yes" ~ "2",
+                               race_black_inp == "Yes" ~ "3",
+                               race_nwother_inp == "Yes" ~ "4")) %>%
+  group_by(treatment, race) %>%
+  summarise(n = n()) %>%
+  mutate(freq = (n / sum(n))* 100) %>%
+  mutate(race_label = case_when(race == "1" ~ "Hispanic",
+                               race == "2" ~ "White",
+                               race == "3" ~ "Black",
+                               race == "4" ~ "Other")) %>%
+  select(treatment, race_label, freq) %>% 
+  gt() %>% 
+  tab_header(title = "Race of Winners and Losers",
+             subtitle = "Not selected = Loser & Selected = Winner") %>% 
+    cols_label(race_label = "Race",
+               freq = "Percentage")
+
+baicker_race
+```
+
+11. I would conclude that lottery winners and lottery losers appear to be very similar. Both on basis of gender and race, the percentages of winners and losers are fairly similar. This leads me to conclude that the study has a high level of internal validity.
