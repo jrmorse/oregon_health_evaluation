@@ -35,9 +35,7 @@ observations <- data %>%
 
 
 1. Question: How many observations are in the data set? What unit of analysis does each observation represent?
-
-
-1. Answer: There are **`r observations`** in the data set. Each observation represents an individual within the study. This includes the respondents and non-respondents.
+    1. Answer: There are **`r observations`** observations in the data set. Each observation represents an individual within the study. This includes the respondents and non-respondents.
 
 
 ```{r question 2, , include=FALSE}
@@ -56,9 +54,7 @@ losers_count <- losers %>%
 
 
 2. Question: The variable “treatment” is a 0/1 dummy. It is equal to 1 for “lottery winners” and 0 for “lottery losers.” How many lottery winners are there? How many lottery losers are there?
-
-
-2. Answer: There are **`r winners_count`** lottery winners. There are **`r losers_count`** lottery losers.
+    2. Answer: There are **`r winners_count`** lottery winners. There are **`r losers_count`** lottery losers.
 
 
 ```{r question 3, , include=FALSE}
@@ -80,9 +76,7 @@ not_enrolled <- data %>%
 
 
 3. Question: The variable “ohp_all_ever_survey” is a 0/1 dummy. Use the “describe” command to find the variable label for this variable and report it here. The variable is equal to 1 for those who enrolled in Medicaid and 0 for those who did not enroll in Medicaid. How many Medicaid enrollees are there? How many Medicaid non-enrollees are there?
-
-
-3. Answer: **Unsure if I have answered the question you're looking for.** The different variable labels are **`r label`**. THere were **`r enrolled`** Medicaid enrolles, and **`r not_enrolled`** Medicaid non-enrollees.
+    3. Answer: **Unsure if I have answered the question you're looking for.** The different variable labels are **`r label`**. THere were **`r enrolled`** Medicaid enrolles, and **`r not_enrolled`** Medicaid non-enrollees.
 
 
 ```{r question 4 , include=FALSE}
@@ -106,8 +100,7 @@ q4_b
 
 
 4. Question:	What percent of “lottery winners” enrolled in Medicaid? What percent of “lottery losers” enrolled in Medicaid?
-
-4. Answer: **`r q4_a`** percent of lottery winners enrolled in Medicaid. **`r q4_b`** percent of lottery losers enrolled in Medicaid.
+    4. Answer: **`r q4_a`** percent of lottery winners enrolled in Medicaid. **`r q4_b`** percent of lottery losers enrolled in Medicaid.
 
 
 ```{r question 5 , include=FALSE}
@@ -116,8 +109,7 @@ question_5 <- q4_a - q4_b
 
 
 5. Question:	By how much (how many percentage points) did winning the lottery increase the probability of enrolling in Medicaid? Is this similar to what is reported in Baicker et al. (2013)?
-
-5. Answer: Winning the lottery increased the probability of enrolling in medicaid by **`r question_5`** percentage points. This is similar to what Baicker et al. (2013) reported but not exactly the same value. Baicker et al. (2013) reported an increased probability of enrolling in medicaid by 24.1 percentage points.
+    5. Answer: Winning the lottery increased the probability of enrolling in medicaid by **`r question_5`** percentage points. This is similar to what Baicker et al. (2013) reported but not exactly the same value. Baicker et al. (2013) reported an increased probability of enrolling in medicaid by 24.1 percentage points.
 
 ## PART 2
 
@@ -147,15 +139,11 @@ baicker_losers_count <- baicker_losers %>%
 
 
 6. Question:	How many people are now in your sample? How many lottery winners are now in your sample? How many lottery losers are now in your sample? Is this similar to what is reported in Baicker et al. (2013)?
-
-
-6. Answer: There are a total of **`r total`** people in my sample. There are **`r baicker_winners_count`** in my sample. There are **`r baicker_losers_count`** in my sample. This appears to be the same as what is reported in Baicker et al. (2013) in table 1. The number of controls, lottery winners, and total survey respondents are all the same.
+    6. Answer: There are a total of **`r total`** people in my sample. There are **`r baicker_winners_count`** in my sample. There are **`r baicker_losers_count`** in my sample. This appears to be the same as what is reported in Baicker et al. (2013) in table 1. The number of controls, lottery winners, and total survey respondents are all the same.
 
 
 7. Question:	We can compare lottery winners and lottery losers on observable characteristics. Do you expect lottery winners and lottery losers to appear similar on observable characteristics? Why or why not?
-
-
-7. Answer: I do expect lottery winners and lottery losers to appear similar on observable characteristics. If the likilehood of winning the lottery was indeed random, than both populations should be very similar accross characteristics such as race, sex, and income.
+    7. Answer: I do expect lottery winners and lottery losers to appear similar on observable characteristics. If the likilehood of winning the lottery was indeed random, than both populations should be very similar accross characteristics such as race, sex, and income.
 
 
 ```{r question 8, include=FALSE} 
@@ -177,15 +165,11 @@ q8_b <- round(prob * 100,2)[2]
 
 
 8. Question: The variable “gender_inp” reports gender from the in-person survey. What percent of lottery winners are female? What percent of lottery losers are female?
-
-
-
-8. Answer: **`r q8_a`** percent of lottery winners are female. **`r q8_b`** percent of lottery losers are female.
+    8. Answer: **`r q8_a`** percent of lottery winners are female. **`r q8_b`** percent of lottery losers are female.
 
 
 9. Question: The variable “age_inp” reports age from the in-person survey, and the variables “age_19_34_inp”, “age_35_49_inp”, and “age_50_64_inp” are 0/1 dummies for different age bins. What percent of lottery winners and lottery losers are in each of the following age bins: 19-34, 35-49, 50-64?
-
-9. Answer:
+    9. Answer:
 
 ```{r question 9}
 age_groups <- baicker %>% 
@@ -216,24 +200,33 @@ Losers age 50 - 64: 27.02%
 
 
 10. Question: The variables “hispanic_inp”, “race_white_inp”, “race_black_inp”, and “race_nwother_inp” report race/ethnicity indicators from the in-person survey. What percent of lottery winners and lottery losers are in each of the following categories: Non-Hispanic White, Non-Hispanic Black, Non-Hispanic Other, and Hispanic?
-
-
-10. Answer:
+    10. Answer:
 
 ```{r question 10}
+# First I called in the baicker data set that we created at the beginning of part two. From ther I went ahead and created a new column that assigned a numeric value depending on the race of the respondent.
+
 baicker_race <- baicker %>% 
   mutate(race = case_when(hispanic_inp == "Yes" ~ "1",
                                race_white_inp == "Yes" ~ "2",
                                race_black_inp == "Yes" ~ "3",
                                race_nwother_inp == "Yes" ~ "4")) %>%
+  
+# Now I group the respondents by both treatment or non- treatment (winners vs. losers) and the specific race. I do this so that I can then find the percentages of each racial group.
+  
   group_by(treatment, race) %>%
   summarise(n = n()) %>%
   mutate(freq = (n / sum(n))* 100) %>%
+
+  # Now I want to change the numeric classification to a character label so that it makes sense for the reader.
+  
   mutate(race_label = case_when(race == "1" ~ "Hispanic",
                                race == "2" ~ "White",
                                race == "3" ~ "Black",
                                race == "4" ~ "Other")) %>%
-  select(treatment, race_label, freq) %>% 
+  
+# Finally, I select the desired data and I made the table.
+ 
+   select(treatment, race_label, freq) %>% 
   gt() %>% 
   tab_header(title = "Race of Winners and Losers",
              subtitle = "Not selected = Loser & Selected = Winner") %>% 
@@ -245,9 +238,7 @@ baicker_race
 
 
 11. Question:	Overall, would you conclude that lottery winners and lottery losers appear similar or dissimilar on the characteristics you examined? What do you conclude about the study’s internal validity?
-
-
-11. Answer: I would conclude that lottery winners and lottery losers appear to be very similar. Both on basis of gender and race, the percentages of winners and losers are fairly similar. This leads me to conclude that the study has a high level of internal validity.
+    11. Answer: I would conclude that lottery winners and lottery losers appear to be very similar. Both on basis of gender and race, the percentages of winners and losers are fairly similar. This leads me to conclude that the study has a high level of internal validity.
 
 
 ## PART 3
@@ -268,9 +259,7 @@ q12_b <- prop.table(table(baicker_losers_bp$q12))[[2]] *100
 
 
 12. Question: The variable “bp_hyper” is an outcome variable indicating those who had elevated blood pressure. What percent of lottery winners and lottery losers have elevated blood pressure?
-
-
-12. Answer: **`r q12_a`** percent of lottery winners and **`r q12_b`** percent of lottery losers hav elevated blood pressure.
+    12. Answer: **`r q12_a`** percent of lottery winners and **`r q12_b`** percent of lottery losers hav elevated blood pressure.
 
 
 ```{r question 13, include=FALSE}
@@ -280,9 +269,7 @@ itt_estimate <- abs(q12_a - q12_b)
 
 
 13. Question:	The difference in means between lottery winners and lottery losers on the outcome variable “bp_hyper” is an “intent-to-treat” (ITT) estimate of the causal effect of winning the lottery on the probability of having elevated blood pressure. Using your results from the previous question, what is your ITT estimate?
-
-
-13. Answer: **not sure I did this right.** My ITT estimate is **`r itt_estimate`**.
+    13. Answer: **not sure I did this right.** My ITT estimate is **`r itt_estimate`**.
 
 
 ```{r question 14 , include=FALSE}
@@ -291,6 +278,4 @@ bp_medicaid <- question_5 * itt_estimate
 
 
 14. Question:	Using your answer to question 5 and your ITT estimate from the previous question, what is your estimate of the causal effect of enrolling in Medicaid on the probability of having elevated blood pressure? Is this a large effect?
-
-
-14. Answer: I estimate the causal effect of enrolling in Medicaid on the probability of having elevated blood pressure to be **`r bp_medicaid`**. This appears to be a high causal effect.
+    14. Answer: I estimate the causal effect of enrolling in Medicaid on the probability of having elevated blood pressure to be **`r bp_medicaid`**. This appears to be a high causal effect.
