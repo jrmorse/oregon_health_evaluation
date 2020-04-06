@@ -1,12 +1,12 @@
 ---
-title: "Assignment 1"
+title: "Assignment 1_v2"
 author: "John Morse"
-date: "4/2/2020"
+date: "4/6/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, include = FALSE}
@@ -19,7 +19,7 @@ library(psych)
 library(skimr)
 ```
 
-```{r , include=FALSE}
+```{r}
 data <- read_csv("data/ohie.csv") %>% 
   clean_names()
 data
@@ -32,7 +32,7 @@ data
 ```{r question 1}
 observations <- data %>% 
   nrow()
-
+observations
 ```
 
 
@@ -41,18 +41,18 @@ observations <- data %>%
     **Answer:** There are **`r observations`** observations in the data set. Each observation represents an individual within the study. This includes the respondents and non-respondents.
 
 
-```{r question 2, , include=FALSE}
+```{r question 2}
 winners <- data %>% 
   filter(treatment == "Selected") 
 winners_count <- winners %>% 
   nrow()
+winners_count
 
 losers <- data %>% 
   filter(treatment == "Not selected") 
-
 losers_count <- losers %>% 
   nrow()
-
+losers_count
 ```
 
 
@@ -61,7 +61,7 @@ losers_count <- losers %>%
     **Answer:** There are **`r winners_count`** lottery winners. There are **`r losers_count`** lottery losers.
 
 
-```{r question 3, , include=FALSE}
+```{r question 3}
 label <-unique(data$ohp_all_ever_survey, incomparables = FALSE) 
 
 enrolled <- data %>% 
@@ -69,13 +69,14 @@ enrolled <- data %>%
   summarize(count= n()) %>%
   slice(1) %>% 
   pull(2)
+enrolled
 
 not_enrolled <- data %>% 
   group_by(ohp_all_ever_survey) %>% 
   summarize(count= n()) %>%
   slice(2) %>% 
   pull(2)
-
+not_enrolled
 ```
 
 
@@ -84,7 +85,7 @@ not_enrolled <- data %>%
     **Answer:** The different variable labels are **`r label`**. There were **`r enrolled`** Medicaid enrolles, and **`r not_enrolled`** Medicaid non-enrollees.
 
 
-```{r question 4 , include=FALSE}
+```{r question 4 }
 pct_winners_e <- winners %>% 
 mutate(q4 = ifelse(ohp_all_ever_survey == "Enrolled","True", "False"))
 
@@ -109,8 +110,9 @@ q4_b
     **Answer:** **`r q4_a`** percent of lottery winners enrolled in Medicaid. **`r q4_b`** percent of lottery losers enrolled in Medicaid.
 
 
-```{r question 5 , include=FALSE}
+```{r question 5 }
 question_5 <- q4_a - q4_b
+question_5
 ```
 
 
@@ -120,28 +122,30 @@ question_5 <- q4_a - q4_b
 
 ## PART 2
 
-```{r respondents , include=FALSE}
+```{r respondents}
 # only the folks who were classified as respondents.
 
 baicker <- data %>% 
   filter(sample_inp_resp == "Respondent") 
 ```
 
-```{r question 6 , include=FALSE}
+```{r question 6}
 
 total <- baicker %>% 
   nrow()
+total
 
 baicker_winners <- baicker %>% 
   filter(treatment == "Selected") 
 baicker_winners_count <- baicker_winners %>% 
   nrow()
+baicker_winners_count
 
 baicker_losers <- baicker %>% 
   filter(treatment == "Not selected")
 baicker_losers_count <- baicker_losers %>% 
   nrow()
-
+baicker_losers_count
 ```
 
 
@@ -155,13 +159,14 @@ baicker_losers_count <- baicker_losers %>%
     **Answer:** I do expect lottery winners and lottery losers to appear similar on observable characteristics. If the likilehood of winning the lottery was indeed random, then both populations should be very similar accross characteristics such as race, sex, and income.
 
 
-```{r question 8, include=FALSE} 
+```{r question 8} 
 pct_winners_baicker <- baicker_winners %>% 
 mutate(q8 = ifelse(gender_inp == "Female","True", "False"))
 
 prob <- prop.table(table(pct_winners_baicker$q8))
 
 q8_a <- round(prob * 100,2)[2]
+q8_a
 
 pct_losers_baicker <- baicker_losers %>% 
 mutate(q8 = ifelse(gender_inp == "Female","True", "False"))
@@ -169,7 +174,7 @@ mutate(q8 = ifelse(gender_inp == "Female","True", "False"))
 prob <- prop.table(table(pct_losers_baicker$q8))
 
 q8_b <- round(prob * 100,2)[2]
-
+q8_b
 ```
 
 
@@ -248,17 +253,18 @@ baicker_race
 ## PART 3
 
 
-```{r question 12, include=FALSE}
+```{r question 12}
 baicker_winners_bp <- baicker_winners %>% 
  mutate(q12 = ifelse(bp_hyper == 1,"True", "False"))
 
 q12_a <- prop.table(table(baicker_winners_bp$q12))[[2]] *100
+q12_a
 
 baicker_losers_bp <- baicker_losers %>% 
  mutate(q12 = ifelse(bp_hyper == 1,"True", "False")) 
 
 q12_b <- prop.table(table(baicker_losers_bp$q12))[[2]] *100
-
+q12_b
 ```
 
 
@@ -267,9 +273,9 @@ q12_b <- prop.table(table(baicker_losers_bp$q12))[[2]] *100
     **Answer:** **`r q12_a`** percent of lottery winners and **`r q12_b`** percent of lottery losers hav elevated blood pressure.
 
 
-```{r question 13, include=FALSE}
+```{r question 13}
 itt_estimate <- q12_a - q12_b
-
+itt_estimate
 ```
 
 
@@ -278,8 +284,9 @@ itt_estimate <- q12_a - q12_b
     **Answer:** My ITT estimate is **`r itt_estimate`** percentage points.
 
 
-```{r question 14 , include=FALSE}
+```{r question 14}
 bp_medicaid <- itt_estimate / question_5
+bp_medicaid
 ```
 
 
